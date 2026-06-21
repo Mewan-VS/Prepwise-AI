@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PrepWise AI – Smart Study Planner
 
-## Getting Started
+An AI-powered full-stack study planner built with **Next.js 16 (App Router)**,
+**Tailwind CSS v4**, **Supabase**, and the **Groq LLM API**.
 
-First, run the development server:
+Students enter a subject, topics, and an exam date; the app generates a
+personalized day-by-day study schedule and saves it for later.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- 📝 Form to capture **subject, topics, exam date**
+- 🤖 **AI-generated** day-by-day study plan via Groq (`llama-3.3-70b-versatile`)
+- 💾 **Save** plans to Supabase
+- 📚 **View** all saved plans on the `/plans` page
+- 🚀 Ready to **deploy on Vercel**
+
+## Project structure
+
+```
+prepwise-ai/
+├─ app/
+│  ├─ page.tsx               # Home – the study form
+│  ├─ layout.tsx
+│  ├─ plans/page.tsx         # Saved plans (Server Component, reads Supabase)
+│  └─ api/
+│     ├─ generate/route.ts   # POST → calls Groq, returns a plan
+│     └─ plans/route.ts      # GET (list) + POST (save) plans
+├─ components/
+│  ├─ StudyForm.tsx          # Client component: form + generate + save
+│  └─ PlanCard.tsx           # Renders a single plan
+├─ lib/
+│  ├─ supabase.ts            # Supabase client + shared types
+│  └─ groq.ts                # Groq API helper
+└─ supabase/schema.sql       # Database table + RLS policies
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1. Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local` (already present in this project) with:
 
-## Learn More
+```
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+GROQ_API_KEY=your-groq-api-key
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Create the database table
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+In the Supabase dashboard, open **SQL Editor → New query**, paste the contents
+of [`supabase/schema.sql`](./supabase/schema.sql), and run it. This creates the
+`study_plans` table and the Row Level Security policies the app needs.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Run locally
 
-## Deploy on Vercel
+```bash
+npm install
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open http://localhost:3000.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy to Vercel
+
+1. Push this repo to GitHub.
+2. Import it at [vercel.com/new](https://vercel.com/new).
+3. Add the three environment variables above in the Vercel project settings.
+4. Deploy.
+
+## How it works
+
+1. `StudyForm` posts the form data to `/api/generate`.
+2. The route handler calls Groq with a structured prompt and returns a JSON
+   plan (`{ day, focus, tasks[] }[]`).
+3. The plan is shown in a `PlanCard`. Clicking **Save** posts it to
+   `/api/plans`, which inserts it into the Supabase `study_plans` table.
+4. The `/plans` page reads all saved plans directly from Supabase in a Server
+   Component and renders them.
