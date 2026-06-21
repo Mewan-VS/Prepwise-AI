@@ -12,8 +12,7 @@ personalized day-by-day study schedule and saves it for later.
 - 🤖 **AI-generated** day-by-day study plan via Groq (`llama-3.3-70b-versatile`)
 - 💾 **Save** plans to Supabase
 - 📚 **View** all saved plans on the `/plans` page
-- 🚀 Ready to **deploy on Vercel**
-
+  
 ## Project structure
 
 ```
@@ -60,13 +59,6 @@ npm run dev
 ```
 
 Open http://localhost:3000.
-
-## Deploy to Vercel
-
-1. Push this repo to GitHub.
-2. Import it at [vercel.com/new](https://vercel.com/new).
-3. Add the three environment variables above in the Vercel project settings.
-4. Deploy.
 
 ## How it works
 
