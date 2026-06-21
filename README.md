@@ -6,6 +6,8 @@ An AI-powered full-stack study planner built with **Next.js 16 (App Router)**,
 Students enter a subject, topics, and an exam date; the app generates a
 personalized day-by-day study schedule and saves it for later.
 
+🔗 **Live demo:** https://prepwise-ai-drab.vercel.app
+
 ## Features
 
 - 📝 Form to capture **subject, topics, exam date**
@@ -59,6 +61,11 @@ npm run dev
 ```
 
 Open http://localhost:3000.
+
+## Deployment
+
+The app is deployed on **Vercel** at
+[prepwise-ai-drab.vercel.app](https://prepwise-ai-drab.vercel.app).
 
 ## How it works
 
